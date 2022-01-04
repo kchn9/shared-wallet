@@ -16,4 +16,10 @@ contract Wallet {
     function depositFunds() payable public {
         payable(this).transfer(msg.value);
     }
+
+    /**
+     * @dev Fallback function to receive sender Ether
+     */
+    receive() external payable {
+    }
 }
