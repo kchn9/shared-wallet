@@ -11,7 +11,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
 contract Wallet is Ownable {
 
-    mapping (address => uint) private allowance;
+    mapping (address => uint) private allowance; // allowance ledger
 
     /**
      * @dev Get contract balance
@@ -33,6 +33,15 @@ contract Wallet is Ownable {
      */
     function setAllowance(address _who, uint _allowance) public onlyOwner {
         allowance[_who] = _allowance;
+    }
+
+    /**
+     * @dev Reduces allowance by specified amount
+     * @param _amount Amount of ether allowance to reduce
+     */
+    function reduceAllowance(uint _amount) internal onlyAllowed(_amount) {
+        require(_amount <= allowance[msg.sender], "Wallet: Amount to reduce allowance is higher than allowance");
+        allowance[msg.sender] -= _amount;
     }
 
     /**
