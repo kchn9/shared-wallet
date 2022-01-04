@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Ownable contract from OpenZeppelin is providing access mechanism where 
+ * @dev Ownable contract from OpenZeppelin is providing access mechanism where
  * there is an account (an owner) that can be granted exclusive access to
  * specific functions by 'onlyOwner' modifier.
  */
@@ -11,20 +11,38 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
 contract Wallet is Ownable {
 
+    mapping (address => uint) private allowance;
+
     /**
-     * @dev Debug only contract balance getter function
+     * @dev Get contract balance
      */
-    function getWalletBalance() external view returns(uint) {
+    function getWalletBalance() private view returns(uint) {
         return address(this).balance;
     }
 
     /**
-     * @dev Withdraws wallet funds to specified address, only owner may call this
+     * @dev Allows owner or anyone with enough allowance to call specified functions
+     */
+    modifier onlyAllowed(uint _amount) {
+        require(msg.sender == owner() || allowance[msg.sender] >= _amount, "Wallet: You are not allowed");
+        _;
+    }
+
+    /**
+     * @dev Sets allowance to specified amount, only owner may call it
+     */
+    function setAllowance(address _who, uint _allowance) public onlyOwner {
+        allowance[_who] = _allowance;
+    }
+
+    /**
+     * @dev Withdraws wallet funds to specified address, only allowed (owner or
+     * depending on allowance mapping) users may call it
      * @param _to Address to receive funds
      * @param _amount Amount of funds to withdraw
      */
-    function withdrawFunds(address payable _to, uint _amount) external onlyOwner {
-        require(_amount <= address(this).balance); // validate input
+    function withdrawFunds(address payable _to, uint _amount) external onlyAllowed(_amount) {
+        require(_amount <= address(this).balance, "Wallet: Not enough funds"); // validate input
         _to.transfer(_amount);
     }
 
