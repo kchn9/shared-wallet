@@ -13,6 +13,14 @@ contract Wallet {
     }
 
     /**
+     * @dev Allows only the owner of contract to call specified functions
+     */
+    modifier ownerOnly {
+        require(msg.sender == owner);
+        _;
+    }
+
+    /**
      * @dev Debug only contract balance getter function
      */
     function getWalletBalance() external view returns(uint) {
