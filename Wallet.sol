@@ -3,6 +3,15 @@ pragma solidity ^0.8.0;
 
 contract Wallet {
 
+    address public owner; // debug only
+
+    /**
+     * @dev Sets owner address to sender address
+     */
+    constructor() {
+        owner = msg.sender;
+    }
+
     /**
      * @dev Debug only contract balance getter function
      */
