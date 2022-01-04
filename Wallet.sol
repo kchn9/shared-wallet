@@ -3,45 +3,17 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Ownable contract from OpenZeppelin is providing access mechanism where
- * there is an account (an owner) that can be granted exclusive access to
- * specific functions by 'onlyOwner' modifier.
+ * @dev Allowable implements mechanism to control access to any countable goods by
+ * 'onlyAllowed' modifier.
  */
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
+import "./Allowable.sol";
 
-contract Wallet is Ownable {
-
-    mapping (address => uint) private allowance; // allowance ledger
-
+contract Wallet is Allowable {
     /**
      * @dev Get contract balance
      */
-    function getWalletBalance() private view returns(uint) {
+    function getWalletBalance() external view returns(uint) {
         return address(this).balance;
-    }
-
-    /**
-     * @dev Allows owner or anyone with enough allowance to call specified functions
-     */
-    modifier onlyAllowed(uint _amount) {
-        require(msg.sender == owner() || allowance[msg.sender] >= _amount, "Wallet: You are not allowed");
-        _;
-    }
-
-    /**
-     * @dev Sets allowance to specified amount, only owner may call it
-     */
-    function setAllowance(address _who, uint _allowance) public onlyOwner {
-        allowance[_who] = _allowance;
-    }
-
-    /**
-     * @dev Reduces allowance by specified amount
-     * @param _amount Amount of ether allowance to reduce
-     */
-    function reduceAllowance(uint _amount) internal onlyAllowed(_amount) {
-        require(_amount <= allowance[msg.sender], "Wallet: Amount to reduce allowance is higher than allowance");
-        allowance[msg.sender] -= _amount;
     }
 
     /**
@@ -52,6 +24,9 @@ contract Wallet is Ownable {
      */
     function withdrawFunds(address payable _to, uint _amount) external onlyAllowed(_amount) {
         require(_amount <= address(this).balance, "Wallet: Not enough funds"); // validate input
+        if (msg.sender != owner()) {
+            reduceAllowance(_amount); // reduce allowance to avoid double-spending
+        } // do not reduce allowance of owner
         _to.transfer(_amount);
     }
 
