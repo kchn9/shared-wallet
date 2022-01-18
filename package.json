@@ -1,5 +1,26 @@
 {
-  "dependencies": {
+  "name": "shared-wallet",
+  "description": "Solidity smart contracts created online in Remix editor. ## Features and goals: - on-chain wallet smart contract, - store funds and withdraw them, - control access by ownership & allowance mechanism, - reuse already existing OpenZeppelin smart contract ## Real world use cases: - control by allowance expences employee on buisness trip, - allowance for children to spend funds per week/per month etc., - give contractors allowance to spend certain amount of funds ### Instalation Feel free to just copy code to [Remix](http://remix.ethereum.org).",
+  "version": "1.0.0",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
     "@openzeppelin/contracts": "^4.4.2"
-  }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kchn9/shared-wallet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kchn9/shared-wallet/issues"
+  },
+  "homepage": "https://github.com/kchn9/shared-wallet#readme"
 }
