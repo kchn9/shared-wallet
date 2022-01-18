@@ -7,7 +7,7 @@ pragma solidity ^0.8.0;
  * there is an account (an owner) that can be granted exclusive access to
  * specific functions by 'onlyOwner' modifier.
  */
-import { Ownable } from "@openzeppelin/contracts";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * @dev Allowable implements mechanism to control access to any countable goods by
