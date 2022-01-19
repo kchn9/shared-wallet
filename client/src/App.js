@@ -4,8 +4,8 @@ import getWeb3 from "./getWeb3";
 
 import "./App.css";
 
+
 const App = () => {
-  const [ticker, setTicker] = useState(0);
   const [web3State, setWeb3State] = useState({ web3: null, accounts: null, walletContract: null });
   const [walletBalance, setWalletBalance] = useState(0);
 
@@ -42,7 +42,7 @@ const App = () => {
   useEffect(() => {
     const tickerInterval = setInterval(() => {
       if (web3State && web3State.walletContract) receiveBalance();
-    }, 1000); // refresh balance of wallet every 5 seconds
+    }, 1000); // refresh balance of wallet every 1 second
     return () => clearInterval(tickerInterval);
   })
 
@@ -50,24 +50,22 @@ const App = () => {
       if (web3State && web3State.walletContract) receiveBalance();
   }, [web3State.walletContract])
 
-  if (!web3State.web3) {
-    return (
-      <div>
-        <h2>Loading...</h2>
-        <i>Please, make sure your metamask account is connected.</i>
-      </div>
-    )
-  }
-
   return (
     <div className='App'>
       <h1>Ethereum shared wallet client</h1>
-        <div className="Wallet-info">
-          <p>Wallet is connected at address: {web3State.walletContract.options.address}</p>
-          <h3>Stored balance is:
-          <strong> {web3State.web3.utils.fromWei(walletBalance.toString())}ETH </strong>
-          </h3>
-        </div>
+        {web3State.web3 ? (
+          <div className="Wallet-info">
+            <p>Wallet is connected at address: {web3State.walletContract.options.address}</p>
+            <h3>Stored balance is:</h3>
+            <strong> {web3State.web3.utils.fromWei(walletBalance.toString())}ETH </strong>
+            <p style={{fontSize: "12px", opacity: "50%", marginBottom: 0}}>(auto refreshing)</p>
+          </div>
+        ) : (
+          <div className="Wallet-disconected">
+            <h3>Loading...</h3>
+            <i>Please, make sure your metamask account is connected.</i>
+          </div>
+        )}
     </div>
   )
 }
