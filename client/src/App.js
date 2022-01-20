@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import WalletContract from "./contracts/Wallet.json";
 import getWeb3 from "./getWeb3";
 
+import Actions from './components/Actions.jsx';
+
 import "./App.css";
 
 
@@ -66,6 +68,7 @@ const App = () => {
             <i>Please, make sure your metamask account is connected.</i>
           </div>
         )}
+        {web3State.web3 && <Actions web3State={web3State} receiveBalance={receiveBalance} />}
     </div>
   )
 }
